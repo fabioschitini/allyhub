@@ -4,20 +4,72 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button,Col,Form,Row,Container} from 'react-bootstrap';
 import { Formik } from 'formik';
  import * as yup from 'yup';
+ import Multiselect from "multiselect-react-dropdown";
+ import './App.css'
+import { useEffect } from 'react';
+
+const instance=Axios.create({ 
+  baseURL: 'https://amazon-api.sellead.com/',
+}); 
 
 function App() {
+  const [validarPais, setValidarPais] = useState('form-control is-invalid');
+  const [validarCidade, setValidarCidade] = useState('form-control is-invalid');
+  const [listaPaises,setListaPaises]= useState([])
+  const [listaCidades,setListaCidades]= useState([])
+  const [paises,setPaises]= useState([])
+  const [cidades,setCidades]= useState([])
 
+
+  useEffect(()=>{
+      const fetchPais=async()=>{
+        const result=await instance.get('/country')
+        let yep=result.data.map(pais=>{
+          return pais.name_ptbr
+        })
+        setListaPaises(yep)
+      }
+      const fetchCidades=async()=>{
+        const result=await instance.get('/city')
+        let yep=result.data.map(cidade=>{
+         return cidade.name
+        })
+        setListaCidades(yep)
+      }
+      fetchPais()
+      fetchCidades()
+  },[])
   const schema = yup.object().shape({
     nome: yup.string().required("Esse campo é obrigatorio"),
-    endereco: yup.string().required("Esse campo é obrigatorio"),
     celular: yup.string().min(15,'Numero insuficiente').required("Esse campo é obrigatorio"),
     cpf: yup.string().min(14,'Numero insuficiente').required("Esse campo é obrigatorio"),
     email:yup.string().email('Email é inválido!')
     .required('Esse campo é obrigatorio'),
-    observacao: yup.string().required("Esse campo é obrigatorio"),
-    nascimento: yup.string().required("Esse campo é obrigatorio"),
-
   });
+
+  function modificarPais(e){
+    setPaises(e)
+    if(e.length){
+      console.log('Valido')
+      setValidarPais('')
+    }
+    else{
+      console.log('Invalido')
+      setValidarPais('form-control is-invalid')
+    }
+    }
+
+  function modificarCidade(e){
+    setCidades(e)
+      if(e.length){
+        console.log('Valido')
+        setValidarCidade('')
+      }
+      else{
+        console.log('Invalido')
+        setValidarCidade('form-control is-invalid')
+      }
+      }
 
   function mphone(v) {
     if(!v){
@@ -45,7 +97,7 @@ function App() {
     .replace(/(\d{3})(\d{1,2})/, '$1-$2')
     .replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
     }
-    
+  
       return (
           <div>
       <Container fluid>
@@ -58,22 +110,19 @@ function App() {
       <Formik
         validationSchema={schema}
         onSubmit={values=>{
-
-/*           console.log("testando aquiiii")
-         // Axios.post('https://tranquil-shelf-46464.herokuapp.com/users',{email:values.email,cpf:values.cpf,nome:values.nome,endereco:values.endereco,observacao:values.observacao,celular:values.celular,nascimento:values.nascimento})
-         // .then((value)=>console.log(`dado foi submitted`))
-          props.backendData.push({email:values.email,cpf:values.cpf,nome:values.nome,endereco:values.endereco,observacao:values.observacao,celular:values.celular,nascimento:values.nascimento})
-          props.setBackendData(props.backendData)
-          navigate("/Registrar-Clientes/search") */
+          if(paises[0]&&cidades[0]){
+            console.log('submiting')
+            console.log(paises[0])
+          }
+          else{
+            console.log("Valores Invalidos!")
+          }
         }}
         initialValues={{
           nome: '',
-          endereco: '',
           celular: '',
           cpf: '',
           email: '',
-          observacao: "",
-          nascimento:"",
         }}
       >
         {({
@@ -90,8 +139,7 @@ function App() {
           <Form noValidate onSubmit={handleSubmit}>
           <Row>
 
-          <Col>
-
+            <Col>
               <Form.Group as={Col} md="10" controlId="validationFormik01">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
@@ -151,28 +199,44 @@ function App() {
     <Form.Control.Feedback>Tudo certo!</Form.Control.Feedback>
     <Form.Control.Feedback type="invalid">{errors.cpf}</Form.Control.Feedback>         
               </Form.Group>
+            </Col>
 
-              </Col>
+          <Col>
+              <Form.Group>
+              <Form.Label>Pais</Form.Label>
+              {listaPaises?
+                            <Multiselect
+                            isObject={false}
+                            onRemove={modificarPais}
+                            onSelect={modificarPais}
+                            options={listaPaises}
+                            showCheckbox
+                            className={validarPais}
+                    />
+              :null}
 
-              <Col>
-
-              <Form.Group as={Col} md="10" controlId="validationFormik05">
-                <Form.Label>Observacao</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Observacao"
-                  name="observacao"
-                  value={values.observacao}
-                  onChange={handleChange}
-                  isValid={touched.observacao && !errors.observacao}
-                />
-                <Form.Control.Feedback>Tudo certo!</Form.Control.Feedback>
+        {!paises[0]?<p className='invalid-text'>Esse campo é obrigatorio</p>:null} 
               </Form.Group>
-              </Col> 
+
+              <Form.Group>
+              <Form.Label>Cidade</Form.Label>
+              {listaCidades?
+                            <Multiselect
+                            isObject={false}
+                            onRemove={modificarCidade}
+                            onSelect={modificarCidade}
+                            options={listaCidades}
+                            showCheckbox
+                            className={validarCidade}
+                    />
+              :null}
+                 {!cidades[0]?<p className='invalid-text'>Esse campo é obrigatorio</p>:null} 
+              </Form.Group>
+          </Col> 
 
               </Row>
-              
             <Button style={{marginTop:"10vh"}} type="submit">Confirmar</Button>
+
           </Form>
         )}
       </Formik>
