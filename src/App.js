@@ -102,10 +102,7 @@ function App() {
           <div>
       <Container fluid>
   
-        <header >
-        <h1>Cadastro de Cliente</h1>
-        <p><em>Local de cadastro de clientes</em></p>
-        </header>
+ 
      
       <Formik
         validationSchema={schema}
@@ -140,6 +137,7 @@ function App() {
           <Row>
 
             <Col>
+            <h2>Dados Pessoais</h2>
               <Form.Group as={Col} md="10" controlId="validationFormik01">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
@@ -202,6 +200,7 @@ function App() {
             </Col>
 
           <Col>
+          <h2>Destino de Interesse</h2>
               <Form.Group>
               <Form.Label>Pais</Form.Label>
               {listaPaises?
@@ -235,7 +234,10 @@ function App() {
           </Col> 
 
               </Row>
-            <Button style={{marginTop:"10vh"}} type="submit">Confirmar</Button>
+              <div style={{display: 'flex',justifyContent: 'center'}}>
+              <Button style={{width:'30%'}}type="submit">Enviar</Button>
+
+              </div>
 
           </Form>
         )}

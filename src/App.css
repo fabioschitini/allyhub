@@ -9,4 +9,11 @@
     font-size: .875em;
     color: #dc3545;
 }
+.col{
 
+    margin: 3rem;
+}
+
+.btn-primary{
+background-color: #262a2e;
+}
