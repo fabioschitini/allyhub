@@ -3,9 +3,9 @@ import Axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button,Col,Form,Row,Container} from 'react-bootstrap';
 import { Formik } from 'formik';
- import * as yup from 'yup';
- import Multiselect from "multiselect-react-dropdown";
- import './App.css'
+import * as yup from 'yup';
+import Multiselect from "multiselect-react-dropdown";
+import './App.css'
 import { useEffect } from 'react';
 
 const instance=Axios.create({ 
@@ -101,9 +101,7 @@ function App() {
       return (
           <div>
       <Container fluid>
-  
- 
-     
+    
       <Formik
         validationSchema={schema}
         onSubmit={values=>{
