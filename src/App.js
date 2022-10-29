@@ -213,7 +213,7 @@ function App() {
           <Col>
           <h2>Destino de Interesse</h2>
               <Form.Group>
-              <Form.Label>Pais</Form.Label>
+              <Form.Label>País</Form.Label>
               {listaPaises?
                             <Multiselect
                             isObject={false}
