@@ -23,18 +23,30 @@ function App() {
 
   useEffect(()=>{
       const fetchPais=async()=>{
-        const result=await instance.get('/country')
-        let yep=result.data.map(pais=>{
-          return pais.name_ptbr
-        })
-        setListaPaises(yep)
+        try{
+          const result=await instance.get('/country')
+          let yep=result.data.map(pais=>{
+            return pais.name_ptbr
+          })
+          setListaPaises(yep)
+        }
+        catch(e){
+          console.error(e.message)
+        }
+
       }
       const fetchCidades=async()=>{
-        const result=await instance.get('/city')
-        let yep=result.data.map(cidade=>{
-         return cidade.name
-        })
-        setListaCidades(yep)
+        try{
+          const result=await instance.get('/city')
+          let yep=result.data.map(cidade=>{
+           return cidade.name
+          })
+          setListaCidades(yep)
+        }
+        catch(e){
+          console.error(e.message)
+        }
+
       }
       fetchPais()
       fetchCidades()
@@ -89,6 +101,7 @@ function App() {
     }
   return r
   }
+  
   function _cpf(cpf) {
     return cpf
     .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
