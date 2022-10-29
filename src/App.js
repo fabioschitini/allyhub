@@ -101,7 +101,7 @@ function App() {
     }
   return r
   }
-  
+
   function _cpf(cpf) {
     return cpf
     .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
@@ -180,7 +180,7 @@ function App() {
               </Form.Group>
 
               <Form.Group as={Col} md="10" controlId="validationFormik03">
-                <Form.Label>Celular</Form.Label>
+                <Form.Label>Telefone</Form.Label>
                 <Form.Control
                   type="text" 
                   placeholder="(75) 99220-4987"
